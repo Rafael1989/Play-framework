@@ -1,0 +1,3 @@
+POST 	/produto/novo               controllers.ProdutoController.salva
+GET     /produto/novo 				controllers.ProdutoController.formulario
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
