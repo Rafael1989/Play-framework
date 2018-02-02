@@ -6,15 +6,21 @@ import javax.persistence.Id;
 
 import com.avaje.ebean.Model;
 
+import play.data.validation.Constraints.Required;
+
 @Entity
 public class Produto extends Model{
 	@Id
 	@GeneratedValue
 	private Integer id;
+	@Required(message = "O campo título é obrigatório")
 	private String titulo;
+	@Required(message = "O campo código é obrigatório")
 	private String codigo;
+	@Required(message = "O campo tipo é obrigatório")
 	private String tipo;
 	private String descricao;
+	@Required(message = "O campo preço é obrigatório")
 	private Double preco;
 
 	public String getTitulo() {
