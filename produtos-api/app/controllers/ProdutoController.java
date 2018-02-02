@@ -3,6 +3,8 @@ package controllers;
 import com.google.inject.Inject;
 
 import models.Produto;
+import play.data.DynamicForm;
+import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -20,7 +22,10 @@ public class ProdutoController extends Controller{
 	}
 	
 	public Result formulario() {
-		return ok(formulario.render("Cadastro de produto"));
+		Produto produto = new Produto();
+		produto.setTipo("livro");
+		Form<Produto> form = formularios.form(Produto.class).fill(produto);
+		return ok(formulario.render(form));
 	}
 
 }
