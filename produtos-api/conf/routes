@@ -4,3 +4,5 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET		/api/produtos				controllers.ApiController.comFiltro
 GET		/api/produtos/todos			controllers.ApiController.todosOsProdutos
 GET		/api/produtos/tipo/:tipo	controllers.ApiController.doTipo(tipo: String)
+POST 	/usuario/novo               controllers.UsuarioController.salva
+GET     /usuario/novo 				controllers.UsuarioController.formulario

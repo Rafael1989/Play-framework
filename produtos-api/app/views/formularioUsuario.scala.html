@@ -1,0 +1,12 @@
+@(formulario: Form[Usuario])
+@import b3.vertical.fieldConstructor;
+@main("Cadastro de usuario"){
+	@b3.form(routes.UsuarioController.salva){
+		<h1>Cadastre-se</h1>
+		@b3.text(formulario("nome"),'_label -> "Nome")
+		@b3.email(formulario("email"),'_label -> "Email")
+		@b3.password(formulario("senha"),'_label -> "Senha")
+		@b3.password(formulario("confirmaSenha"),'_label -> "Confirmar Senha")
+		@b3.submit('class -> "btn btn-primary"){ Cadastrar }
+	}
+}
