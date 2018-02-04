@@ -23,6 +23,8 @@ public class Usuario extends Model {
 	
 	@Required(message = "O campo senha é obrigatório")
 	private String senha;
+	
+	private Boolean verificado;
 
 	public Integer getId() {
 		return id;
@@ -55,5 +57,14 @@ public class Usuario extends Model {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+
+	public Boolean getVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(Boolean verificado) {
+		this.verificado = verificado;
+	}
+
 
 }
