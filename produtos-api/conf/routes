@@ -1,3 +1,6 @@
 POST 	/produto/novo               controllers.ProdutoController.salva
 GET     /produto/novo 				controllers.ProdutoController.formulario
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET		/api/produtos				controllers.ApiController.comFiltro
+GET		/api/produtos/todos			controllers.ApiController.todosOsProdutos
+GET		/api/produtos/tipo/:tipo	controllers.ApiController.doTipo(tipo: String)

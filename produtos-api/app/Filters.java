@@ -1,10 +1,11 @@
-import javax.inject.*;
-import play.*;
-import play.mvc.EssentialFilter;
-import play.http.HttpFilters;
-import play.mvc.*;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import filters.ExampleFilter;
+import play.Environment;
+import play.Mode;
+import play.http.HttpFilters;
+import play.mvc.EssentialFilter;
 
 /**
  * This class configures filters that run on every request. This
