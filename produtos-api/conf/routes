@@ -7,3 +7,7 @@ GET		/api/produtos/tipo/:tipo	controllers.ApiController.doTipo(tipo: String)
 POST 	/usuario/novo               controllers.UsuarioController.salva
 GET     /usuario/novo 				controllers.UsuarioController.formulario
 GET 	/usuario/confirma/:email/:codigo controllers.UsuarioController.confirmaCadastro(email,codigo)
+GET		/usuario/painel				controllers.UsuarioController.painel
+GET		/login						controllers.UsuarioController.formularioLogin
+POST 	/login						controllers.UsuarioController.fazLogin
+GET		/logout						controllers.UsuarioController.fazLogout

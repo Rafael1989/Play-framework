@@ -10,13 +10,17 @@ import daos.UsuarioDao;
 import models.EmailDeCadastro;
 import models.TokenDeCadastro;
 import models.Usuario;
+import models.UsuarioAutenticado;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.mailer.MailerClient;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security.Authenticated;
 import validadores.ValidadorDeUsuario;
 import views.html.formularioUsuario;
+import views.html.formularioLogin;
 
 public class UsuarioController extends Controller{
 	
@@ -34,6 +38,8 @@ public class UsuarioController extends Controller{
 	
 	@Inject 
 	private TokenDeCadastroDao tokenDeCadastroDao;
+	
+	public static final String AUTH = "auth";
 	
 	public Result formulario() {
 		Form<Usuario> form = formularios.form(Usuario.class);
@@ -68,11 +74,48 @@ public class UsuarioController extends Controller{
 				usuario.setVerificado(true);
 				usuario.update();
 				flash("success","Seu usuário foi confirmado com sucesso");
-				return redirect("/usuario/painel");
+				session(AUTH, usuario.getEmail());
+				return redirect(routes.UsuarioController.painel());
 			}
 		}
 		flash("danger","Algo deu errado ao confirmar seu cadastro");
-		return redirect("/login");
+		return redirect(routes.UsuarioController.formularioLogin());
+	}
+	
+	@Authenticated(UsuarioAutenticado.class)
+	public Result painel() {
+		return ok("Painel do usuário");
+	}
+	
+	public Result formularioLogin() {
+		return ok(formularioLogin.render(formularios.form()));
+	}
+	
+	public Result fazLogin() {
+		DynamicForm dynamicForm = formularios.form().bindFromRequest();
+		String email = dynamicForm.get("email");
+		String senhaCriptografada = Crypt.sha1(dynamicForm.get("senha"));
+		Optional<Usuario> possivelUsuario = usuarioDao.comEmailESenha(email, senhaCriptografada);
+		if(possivelUsuario.isPresent()) {
+			Usuario usuario = possivelUsuario.get();
+			if(usuario.getVerificado()) {
+				session(AUTH, usuario.getEmail());
+				flash("success", "Login efetuado com sucesso");
+				return redirect(routes.UsuarioController.painel());
+			}else {
+				flash("danger","Usuário não confirmou e-mail");
+			}
+		}else {
+			flash("danger","Credenciais inválidas");
+		}
+		return redirect(routes.UsuarioController.formularioLogin());
+	}
+	
+	@Authenticated(UsuarioAutenticado.class)
+	public Result fazLogout() {
+		session().clear();
+		flash("success","Logout efetuado com sucesso");
+		return redirect(routes.UsuarioController.formularioLogin());
 	}
 
 }
