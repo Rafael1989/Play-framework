@@ -19,5 +19,10 @@ public class UsuarioDao {
 		Usuario usuario = usuarios.query().where().eq("email", email).eq("senha", senha).findUnique();
 		return Optional.ofNullable(usuario);
 	}
+	
+	public Optional<Usuario> comToken(String codigo){
+		Usuario usuario = usuarios.query().where().eq("token.codigo", codigo).findUnique();
+		return Optional.ofNullable(usuario);
+	}
 
 }

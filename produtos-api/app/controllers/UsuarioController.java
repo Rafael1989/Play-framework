@@ -5,12 +5,13 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import akka.util.Crypt;
+import autenticadores.UsuarioAutenticado;
 import daos.TokenDeCadastroDao;
 import daos.UsuarioDao;
 import models.EmailDeCadastro;
+import models.TokenDaApi;
 import models.TokenDeCadastro;
 import models.Usuario;
-import models.UsuarioAutenticado;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.data.FormFactory;
@@ -19,8 +20,9 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security.Authenticated;
 import validadores.ValidadorDeUsuario;
-import views.html.formularioUsuario;
 import views.html.formularioLogin;
+import views.html.formularioUsuario;
+import views.html.painelUsuario;
 
 public class UsuarioController extends Controller{
 	
@@ -72,19 +74,28 @@ public class UsuarioController extends Controller{
 			if(tokenDeCadastro.getUsuario().equals(usuario)) {
 				tokenDeCadastro.delete();
 				usuario.setVerificado(true);
+				TokenDaApi tokenDaApi = new TokenDaApi(usuario);
+				tokenDaApi.save();
+				usuario.setToken(tokenDaApi);
 				usuario.update();
 				flash("success","Seu usuário foi confirmado com sucesso");
-				session(AUTH, usuario.getEmail());
+				insereUsuarioNaSessao(usuario);
 				return redirect(routes.UsuarioController.painel());
 			}
 		}
 		flash("danger","Algo deu errado ao confirmar seu cadastro");
 		return redirect(routes.UsuarioController.formularioLogin());
 	}
+
+	private void insereUsuarioNaSessao(Usuario usuario) {
+		session(AUTH, usuario.getToken().getCodigo());
+	}
 	
 	@Authenticated(UsuarioAutenticado.class)
 	public Result painel() {
-		return ok("Painel do usuário");
+		String codigo = session(AUTH);
+		Usuario usuario = usuarioDao.comToken(codigo).get();
+		return ok(painelUsuario.render(usuario));
 	}
 	
 	public Result formularioLogin() {
@@ -99,7 +110,7 @@ public class UsuarioController extends Controller{
 		if(possivelUsuario.isPresent()) {
 			Usuario usuario = possivelUsuario.get();
 			if(usuario.getVerificado()) {
-				session(AUTH, usuario.getEmail());
+				insereUsuarioNaSessao(usuario);
 				flash("success", "Login efetuado com sucesso");
 				return redirect(routes.UsuarioController.painel());
 			}else {

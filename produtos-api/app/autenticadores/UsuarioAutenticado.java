@@ -1,4 +1,4 @@
-package models;
+package autenticadores;
 
 import java.util.Optional;
 
@@ -7,8 +7,9 @@ import javax.inject.Inject;
 import controllers.UsuarioController;
 import controllers.routes;
 import daos.UsuarioDao;
-import play.mvc.Result;
+import models.Usuario;
 import play.mvc.Http.Context;
+import play.mvc.Result;
 import play.mvc.Security.Authenticator;
 
 public class UsuarioAutenticado extends Authenticator{
@@ -18,8 +19,8 @@ public class UsuarioAutenticado extends Authenticator{
 	
 	@Override
 	public String getUsername(Context context) {
-		String email = context.session().get(UsuarioController.AUTH);
-		Optional<Usuario> possivelUsuario = usuarioDao.comEmail(email);
+		String codigo = context.session().get(UsuarioController.AUTH);
+		Optional<Usuario> possivelUsuario = usuarioDao.comToken(codigo);
 		if(possivelUsuario.isPresent()) {
 			return possivelUsuario.get().getNome();
 		}

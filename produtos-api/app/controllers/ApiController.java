@@ -7,6 +7,8 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import acoes.AcaoDeRegistroDeAcesso;
+import autenticadores.AcessoDaApiAutenticado;
 import daos.ProdutoDao;
 import models.EnvelopeDeProdutos;
 import models.Produto;
@@ -15,8 +17,12 @@ import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security.Authenticated;
+import play.mvc.With;
 import validadores.ValidadorDeParametros;
 
+@Authenticated(AcessoDaApiAutenticado.class)
+@With(AcaoDeRegistroDeAcesso.class)
 public class ApiController extends Controller{
 	
 	@Inject

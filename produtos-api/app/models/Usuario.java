@@ -1,8 +1,12 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.avaje.ebean.Model;
 
@@ -25,6 +29,12 @@ public class Usuario extends Model {
 	private String senha;
 	
 	private Boolean verificado;
+	
+	@OneToOne(mappedBy="usuario")
+	private TokenDaApi token;
+	
+	@OneToMany(mappedBy = "usuario")
+	private List<RegistroDeAcesso> acessos;
 
 	public Integer getId() {
 		return id;
@@ -65,6 +75,21 @@ public class Usuario extends Model {
 	public void setVerificado(Boolean verificado) {
 		this.verificado = verificado;
 	}
+	
+	public TokenDaApi getToken() {
+		return token;
+	}
+	
+	public void setToken(TokenDaApi token) {
+		this.token = token;
+	}
 
+	public List<RegistroDeAcesso> getAcessos() {
+		return acessos;
+	}
+
+	public void setAcessos(List<RegistroDeAcesso> acessos) {
+		this.acessos = acessos;
+	}
 
 }
