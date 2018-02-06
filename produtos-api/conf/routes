@@ -11,3 +11,5 @@ GET		/usuario/painel				controllers.UsuarioController.painel
 GET		/login						controllers.UsuarioController.formularioLogin
 POST 	/login						controllers.UsuarioController.fazLogin
 GET		/logout						controllers.UsuarioController.fazLogout
+GET		/admin/usuarios				controllers.AdminController.usuarios
+GET		/admin/produtos				controllers.AdminController.produtos

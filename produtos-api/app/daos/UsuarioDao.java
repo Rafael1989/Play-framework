@@ -1,5 +1,6 @@
 package daos;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.avaje.ebean.Finder;
@@ -23,6 +24,10 @@ public class UsuarioDao {
 	public Optional<Usuario> comToken(String codigo){
 		Usuario usuario = usuarios.query().where().eq("token.codigo", codigo).findUnique();
 		return Optional.ofNullable(usuario);
+	}
+
+	public List<Usuario> todos() {
+		return usuarios.all();
 	}
 
 }

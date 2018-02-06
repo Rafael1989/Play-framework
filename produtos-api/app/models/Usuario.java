@@ -3,6 +3,8 @@ package models;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -21,22 +23,25 @@ public class Usuario extends Model {
 
 	@Required(message = "O campo nome é obrigatório")
 	private String nome;
-	
+
 	@Required(message = "O campo email é obrigatório")
 	private String email;
-	
+
 	@Required(message = "O campo senha é obrigatório")
 	private String senha;
-	
+
 	private Boolean verificado;
-	
-	@OneToOne(mappedBy="usuario")
+
+	@OneToOne(mappedBy = "usuario")
 	private TokenDaApi token;
-	
+
 	@OneToMany(mappedBy = "usuario")
 	private List<RegistroDeAcesso> acessos;
 
-	public Integer getId() {
+	@Enumerated(EnumType.STRING)
+	private Papel papel = Papel.CLIENTE;
+
+	public Integer getId() {	
 		return id;
 	}
 
@@ -75,11 +80,11 @@ public class Usuario extends Model {
 	public void setVerificado(Boolean verificado) {
 		this.verificado = verificado;
 	}
-	
+
 	public TokenDaApi getToken() {
 		return token;
 	}
-	
+
 	public void setToken(TokenDaApi token) {
 		this.token = token;
 	}
@@ -90,6 +95,18 @@ public class Usuario extends Model {
 
 	public void setAcessos(List<RegistroDeAcesso> acessos) {
 		this.acessos = acessos;
+	}
+
+	public Boolean isAdmin() {
+		return papel == Papel.ADMIN;
+	}
+
+	public Papel getPapel() {
+		return papel;
+	}
+
+	public void setPapel(Papel papel) {
+		this.papel = papel;
 	}
 
 }

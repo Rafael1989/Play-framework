@@ -3,17 +3,17 @@ package controllers;
 
 import javax.inject.Inject;
 
-import daos.ProdutoDao;
+import autenticadores.AdminAutenticado;
 import models.Produto;
-import play.data.DynamicForm;
 import play.data.Form;
 import play.data.FormFactory;
-import play.data.validation.ValidationError;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security.Authenticated;
 import validadores.ValidadorDeProduto;
 import views.html.formulario;
 
+@Authenticated(AdminAutenticado.class)
 public class ProdutoController extends Controller{
 	
 	@Inject
